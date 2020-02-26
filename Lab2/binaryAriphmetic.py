@@ -1,6 +1,4 @@
-if __name__ == "__main__":
-
-    def binaryAddition(a, b):
+def binaryAddition(a, b):
         print("\n\t\tADDITION:\n")
         diff = len(a)-len(b)
 
@@ -19,7 +17,7 @@ if __name__ == "__main__":
                 d = (a[i] + b[i] + carry) // 2
                 sum[i] = (a[i] + b[i] + carry) - 2*d
                 carry = d
-                print(f"\t\t+Partial sum: {sum}     Carry: {carry}")
+                # print(f"\t\t+Partial sum: {sum}     Carry: {carry}")
         
         if (carry == 1):
             sum = [carry] + sum
@@ -27,7 +25,7 @@ if __name__ == "__main__":
         print(f"\n\t\t+Final sum:   {sum}")
         return sum
 
-    def binarySubtraction(a, b):
+def binarySubtraction(a, b):
         print("\n\t\tSUBTRACTION:\n")
         diff = len(a)-len(b)
 
@@ -45,12 +43,13 @@ if __name__ == "__main__":
 
         for i in reversed(range(len(a))):
             d = a[i] - b[i]
-
             if d <= 0:
                 if (carry == 0 and d != 0):
                     carry = 1
                     subtr[i] = 1
-                elif (carry == 1):
+                elif (carry == 1 and d == 0):
+                    subtr[i] = 1
+                elif (carry == 1 and d != 0):
                     subtr[i] = 0
                 else:
                     subtr[i] = 0
@@ -66,48 +65,46 @@ if __name__ == "__main__":
 
         return subtr, sign
 
-    def shiftRight(reg):
+def shiftRight(reg):
         return [0,] + reg
 
-    def shiftLeft(reg, value = 0):
+def shiftLeft(reg, value = 0):
         return reg + [value]
 
-    def binaryMultiplication(multiplicand, multiplier):
+def binaryMultiplication(multiplicand, multiplier):
         print("MULTIPLICATION:\n")
-        
-        multiplicand = [0,] * (8 - len(multiplicand)) + multiplicand
-        multiplier = [0,] * (8 - len(multiplier)) + multiplier
+        register = [0,] * 48
+        halfRegisterSize = int(len(register) / 2)
+        multiplicand = [0,] * (halfRegisterSize - len(multiplicand)) + multiplicand
+        multiplier = [0,] * (halfRegisterSize - len(multiplier)) + multiplier
         print(f'\tMultiplicand: {multiplicand}',
               f'\n\tMultiplier:   {multiplier}\n')
-
-        register = [0,] * 16
-        print(f"\t*Register: {register}")
-        print(f"\t+Add multiplier to register")
+        # print(f"\t*Register: {register}")
+        # print(f"\t+Add multiplier to register")
         register = binaryAddition(register, multiplier)
 
         iteration = 0
 
         while (iteration <= len(multiplicand)):
             currentBit = register.pop()
-            print("\t*Shift register right")
-            print(f"\tPop bit: {currentBit}")
+            # print("\t*Shift register right")
+            # print(f"\tPop bit: {currentBit}")
             register = shiftRight(register)
-            print(f"\t*Register: {register}")
+            # print(f"\t*Register: {register}")
 
             if (currentBit == 1):
-                print("\t+Add multiplicand to first half of register")
-                register = binaryAddition(register[:8], multiplicand) + register[8:]
-                print(f"\t*Register: {register}")
+                # print("\t+Add multiplicand to first half of register")
+                register = binaryAddition(register[:halfRegisterSize], multiplicand) + register[halfRegisterSize:]
+                # print(f"\t*Register: {register}")
 
             iteration += 1
 
         return register
 
-    def binaryDivision(dividend, divisor):
+def binaryDivision(dividend, divisor):
         remainder = [0,] * 16
         quotient = []
         halfRegisterSize = int(len(remainder) / 2)
-        print(halfRegisterSize)
         remainder = binaryAddition(remainder, dividend)
         print(f"initial remainder value: {remainder}")
         tempRemainder = []
@@ -143,5 +140,8 @@ if __name__ == "__main__":
     # print(subtract, f"\n Znak: {sign}")
 
     # test, rem = binaryDivision([0,1,0,0,1,0,0,0], [1,0,0,0,0])
-    test, rem = binaryDivision([0,1,0,0,0,0,1,0], [1,1,0])
-    print(f"RESULT: {test}", f"REMAINDER: {rem}")
+if __name__ == "__main__":
+        # test, rem = binaryDivision([0,1,0,0,1,0,0,0], [1,0,0,0])
+        # print(f"RESULT: {test}", f"REMAINDER: {rem}")
+        subtract, sign = binarySubtraction([1,0,0,0,0,0,1,1,1], [0,1,1,1,1,1,1,0])
+        print(subtract)
