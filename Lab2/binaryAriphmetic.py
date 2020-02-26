@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
         for i in reversed(range(len(a))):
             d = a[i] - b[i]
-            # print(d)
+
             if d <= 0:
                 if (carry == 0 and d != 0):
                     carry = 1
@@ -113,10 +113,10 @@ if __name__ == "__main__":
         tempRemainder = []
 
         for i in range(halfRegisterSize):
-            remainder = [remainder[j] for j in reversed(range(len(remainder)))]
+            # remainder = [remainder[j] for j in reversed(range(len(remainder)))]
             print(f"remainder after first inversion: {remainder}")
-            remainder.pop()
-            remainder = [remainder[j] for j in reversed(range(len(remainder)))]
+            remainder.pop(0)
+            # remainder = [remainder[j] for j in reversed(range(len(remainder)))]
             print(f"remainder after SECOND inversion: {remainder}")
             
             remainder = shiftLeft(remainder)
